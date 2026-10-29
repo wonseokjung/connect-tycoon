@@ -10,7 +10,7 @@ class BrainNotFound(Exception):
 
 HOW = ("brain.json을 찾지 못했습니다.\n"
        "  1) Colab 왼쪽 세로 막대의 📁(파일) 아이콘을 누릅니다\n"
-       "  2) 게임에서 저장한 brain.json(다운로드 폴더의 회사이름-v2.json 같은 파일)을 그 창에 끌어다 놓습니다\n"
+       "  2) 내려받은 brain.json(게임의 회사이름-v2.json · 학습 실험실 · LINK-01 로봇 학습기의 link01-…-brain.json)을 그 창에 끌어다 놓습니다\n"
        "  3) 이 셀을 다시 실행합니다 (▶)\n"
        "  * 런타임을 다시 시작하면 올린 파일이 지워지니, 그때는 다시 끌어다 놓으세요")
 
@@ -23,7 +23,8 @@ def find_brain(folder="/content", upload_button=True):
     for p in sorted(glob.glob(os.path.join(folder, "*.json")), key=os.path.getmtime, reverse=True):
         try:
             from .lab import is_lab
-            if not is_lab(p):
+            from .link01.brain import is_world
+            if not is_lab(p) and not is_world(p):              # 학습 실험실 · LINK-01 로봇 두뇌 · 게임 두뇌
                 ct.CompanyBrain.from_file(p)
             found.append(p)
         except Exception:
@@ -36,6 +37,19 @@ def find_brain(folder="/content", upload_button=True):
               "버튼이 안 보이거나 눌러도 반응이 없으면: 이 셀을 멈추고(■) → 왼쪽 📁(파일) 창에 brain.json을 끌어다 놓고 → 이 셀을 다시 실행(▶)")
         from google.colab import files
         up = files.upload()
-        if up:
-            return os.path.join(os.getcwd(), next(iter(up)))
+        if up:                                                 # brain.json과 world.json을 같이 골라도 두뇌 쪽을 돌려줍니다
+            return find_brain(os.getcwd(), upload_button=False)
     raise BrainNotFound(HOW)
+
+
+def find_course(folder="/content"):
+    """📁에 함께 끌어다 놓은 LINK-01 코스(world.json · connect-world-course/1) · 가장 최근 것, 없으면 None"""
+    import json
+    for p in sorted(glob.glob(os.path.join(folder, "*.json")), key=os.path.getmtime, reverse=True):
+        try:
+            with open(p, encoding="utf-8") as f:
+                if json.load(f).get("format") == "connect-world-course/1":
+                    return p
+        except Exception:
+            continue
+    return None

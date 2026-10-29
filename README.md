@@ -14,9 +14,10 @@ AI 교육 브랜드 **[CONNECT AI LAB](https://www.youtube.com/@CONNECT-AI-LAB) 
 |---|---|
 | 설명 (모션그래픽 · 단계별 안내) | [ezerai.xyz/models/rl](https://www.ezerai.xyz/models/rl) |
 | 시뮬레이터 프로그램 | 이 저장소 · 아래 [설치](#설치) |
-| 내 RL 모델 바로 올리기 (Colab · 1분) | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/wonseokjung/connect-tycoon/blob/main/notebooks/upload_brain_colab.ipynb) |
+| 내 RL 모델 바로 올리기 (Colab · 1분 · 게임 · 실험실 · LINK-01 로봇) | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/wonseokjung/connect-tycoon/blob/main/notebooks/upload_brain_colab.ipynb) |
 | Qwen으로 옮기기 (Colab) | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/wonseokjung/connect-tycoon/blob/main/notebooks/rl_decision_model_qwen_colab.ipynb) |
 | 물류 두뇌 → Qwen (Colab ③) | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/wonseokjung/connect-tycoon/blob/main/notebooks/logistics_brain_qwen_colab.ipynb) |
+| LINK-01 로봇 두뇌 → Qwen 의사결정 모델 (Colab ④ · GPU 약 1시간) · [로봇 웹 학습기](https://www.ezerai.xyz/robot-lab/world/) | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/wonseokjung/connect-tycoon/blob/main/notebooks/link01_brain_qwen_colab.ipynb) |
 | 첫 결과 (Hugging Face) | [WonseokJayJung/connectailab-rl-jay-v1](https://huggingface.co/WonseokJayJung/connectailab-rl-jay-v1) |
 
 ---

@@ -1,0 +1,47 @@
+{
+ "format": "connect-world-course/1",
+ "world": "link01-decision",
+ "task": "goto_target",
+ "name": "내 코스 1",
+ "goal": {
+  "task": "goto_target",
+  "ko": "목표로 가기",
+  "desc": "머그컵(목표)까지 걸어가기"
+ },
+ "layout": {
+  "start": [
+   -1.5,
+   -1.3,
+   1.692
+  ],
+  "obst": [
+   [
+    6,
+    0,
+    0,
+    0.7854,
+    1.32
+   ],
+   [
+    0,
+    -0.5,
+    0.75,
+    0
+   ],
+   [
+    5,
+    0.65,
+    -0.45,
+    0
+   ]
+  ],
+  "targets": [
+   [
+    "mug",
+    1.4,
+    1.3
+   ]
+  ]
+ },
+ "hash": "d663b1ec"
+}

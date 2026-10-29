@@ -40,7 +40,7 @@ Homepage = "https://github.com/wonseokjung/connect-tycoon"
 include = ["connect_tycoon*"]
 
 [tool.setuptools.package-data]
-connect_tycoon = ["data/*.json", "data/lab/*.json", "data/profiles/*.json", "data/real/*.json", "game/assets/fonts/*"]
+connect_tycoon = ["data/*.json", "data/lab/*.json", "data/link01/*.json", "data/profiles/*.json", "data/real/*.json", "game/assets/fonts/*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
