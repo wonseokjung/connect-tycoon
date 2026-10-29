@@ -16,9 +16,9 @@ def _badge(label, msg, logo, url):
     return f'<a href="{url}"><img src="{img}" alt="{label}"></a>'
 
 
-def brand_header():
+def brand_header(colab=COLAB):
     """모델 카드 맨 위 · 움직이는 배너와 브랜드 배지 (그림은 GitHub에 있어 누가 올린 카드든 똑같이 보입니다)."""
-    badges = " ".join([_badge("Colab", "직접 학습하기", "googlecolab", COLAB),
+    badges = " ".join([_badge("Colab", "직접 학습하기", "googlecolab", colab),
                        _badge("GitHub", "CONNECT TYCOON", "github", "https://github.com/wonseokjung/connect-tycoon"),
                        _badge("YouTube", "CONNECT AI LAB", "youtube", YT),
                        _badge("AI CITY BUILDERS", "강화학습 AI", "bookstack", "https://www.aicitybuilders.com/robot")])

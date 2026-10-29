@@ -18,7 +18,7 @@ CELLS = [
 3. 아래 셀을 위에서부터 차례로 실행합니다.
 
 업로드 이름 · 게임 두뇌 `connectailab-rl-이름-버전-teacher` · LINK-01 로봇 두뇌 `connectailab-rl-이름-버전-link01` (예: `connectailab-rl-jay-v1-link01`).
-Qwen까지 학습해 올리려면 [Qwen 강화학습 Colab](https://colab.research.google.com/github/wonseokjung/connect-tycoon/blob/main/notebooks/rl_decision_model_qwen_colab.ipynb) · LINK-01은 [LINK-01 → Qwen Colab](https://colab.research.google.com/github/wonseokjung/connect-tycoon/blob/main/notebooks/link01_brain_qwen_colab.ipynb)을 쓰세요."""),
+Qwen까지 학습해 올리려면 [Qwen 강화학습 Colab](https://colab.research.google.com/github/wonseokjung/connect-tycoon/blob/main/notebooks/rl_decision_model_qwen_colab.ipynb) · LINK-01은 [LINK-01 의사결정 모델 Colab](https://colab.research.google.com/github/wonseokjung/connect-tycoon/blob/main/notebooks/link01_decision_model_colab.ipynb)을 쓰세요."""),
     ("code", f"""# 설치 (30초)
 !pip -q install "connect-tycoon @ git+{REPO}" huggingface_hub
 import connect_tycoon as ct

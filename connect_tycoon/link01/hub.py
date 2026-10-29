@@ -1,4 +1,4 @@
-"""LINK-01 두뇌 · Qwen 모델을 Hugging Face에 올립니다 · 이름 connectailab-rl-이름-버전-link01 (Qwen은 …-link01-qwen).
+"""LINK-01 의사결정 모델(또는 두뇌만)을 Hugging Face에 올립니다 · 이름 connectailab-rl-이름-버전-link01.
 
 토큰은 Colab 🔑 HF_TOKEN 또는 환경변수 HF_TOKEN (코드에 적지 않습니다).
 환경변수 CT_HF_DRY_RUN=폴더 를 주면 아무것도 올리지 않고, 올릴 파일을 그 폴더에 그대로 만듭니다 (미리 보기 · 시험용).
@@ -12,7 +12,7 @@ from . import sim
 from .brain import WorldBrain
 
 WORLD_URL = "https://www.ezerai.xyz/robot-lab/world/"
-COLAB = "https://colab.research.google.com/github/wonseokjung/connect-tycoon/blob/main/notebooks/link01_brain_qwen_colab.ipynb"
+COLAB = "https://colab.research.google.com/github/wonseokjung/connect-tycoon/blob/main/notebooks/link01_decision_model_colab.ipynb"
 
 
 def _pct(x):
@@ -52,7 +52,7 @@ pipeline_tag: reinforcement-learning
 tags: [reinforcement-learning, deep-reinforcement-learning, ppo, robotics, mujoco, decision-making, link01, connect-ai-world, connect-ai-lab, connectailab]
 ---
 
-{brand_header()}
+{brand_header(COLAB)}
 
 {author_section(author)}
 
@@ -101,7 +101,7 @@ brain = WorldBrain.from_file(hf_hub_download("{repo}", "brain.json"))
 brain.act(obs)        # 관찰 {len(b.observation)}개 (위 순서) → 선택지 번호
 ```
 
-웹 학습기에서 **두뇌 올리기**로 이 brain.json을 다시 올리면 같은 시험을 그대로 다시 볼 수 있습니다. Qwen으로 옮기기: [LINK-01 → Qwen Colab]({COLAB})
+웹 학습기에서 **두뇌 올리기**로 이 brain.json을 다시 올리면 같은 시험을 그대로 다시 볼 수 있습니다. 의사결정 모델 만들기: [LINK-01 의사결정 모델 Colab]({COLAB})
 
 ## 만든 곳 · CONNECT AI LAB × AI CITY BUILDERS
 
@@ -172,8 +172,8 @@ def push_world_brain(path, repo=None, version="v1", name=None, author=None, toke
     return f"https://huggingface.co/{repo}" if user != "dry-run" else os.path.join(os.environ["CT_HF_DRY_RUN"], repo)
 
 
-def qwen_card(repo, results=None, meta=None, base=BASE_MODEL, author=None):
-    """LINK-01 두뇌 → Qwen 모델 카드 · 시험 문제 정답률(두뇌와 같은 답) · 같은 코스 20판 걷기"""
+def decision_card(repo, results=None, meta=None, base=BASE_MODEL, author=None):
+    """LINK-01 두뇌 → 의사결정 모델 카드 · 시험 문제 정답률(두뇌와 같은 답) · 같은 코스 20판 걷기"""
     res, m = results or {}, meta or {}
     sec = lambda v: "—" if v is None else f"{v:.1f}초"
     rows = [f"| {k} | {r.get('accuracy', 0):.1%} | {_pct(r.get('drive_success'))} | {_pct(r.get('drive_collide'))} | {sec(r.get('drive_time_s'))} |"
@@ -188,25 +188,25 @@ base_model: {base}
 library_name: peft
 language: [ko]
 pipeline_tag: reinforcement-learning
-tags: [reinforcement-learning, deep-reinforcement-learning, ppo, robotics, decision-making, link01, connect-ai-world, connect-ai-lab, connectailab, lora, qwen3.5]
+tags: [reinforcement-learning, deep-reinforcement-learning, ppo, robotics, decision-making, link01, connect-ai-world, connect-ai-lab, connectailab, lora]
 ---
 
-{brand_header()}
+{brand_header(COLAB)}
 
 {author_section(author)}
 
-# LINK-01 결정 모델 · {sim.TASK_KO.get(task, task)} · Qwen
+# LINK-01 의사결정 모델 · {sim.TASK_KO.get(task, task)}
 
 LINK-01 로봇의 지금 상황(목표 거리 · 방향 · 거리 센서 · 속도 · 직전 선택)을 글로 읽고, **다음 0.5초 동안 어떻게 걸을지** 보기 글자 하나로 답하는 의사결정 모델입니다.
-[CONNECT AI WORLD 로봇 웹 학습기]({WORLD_URL})에서 사람이 코스를 만들고 PPO로 강화학습한 두뇌(brain.json)를 `{base}`에 옮겨 담았습니다.
+[CONNECT AI WORLD 로봇 웹 학습기]({WORLD_URL})에서 사람이 코스를 만들고 PPO로 강화학습한 두뇌(brain.json)를 선생님으로 언어 모델을 학습했습니다 (LoRA).
 
 ## 만든 방법
 
 1. **두뇌 키우기 (웹 학습기)** · 과제 `{task}` · 약속 `{m.get('contract', '')}` · 배운 코스 {", ".join(f"`{h}`" for h in (m.get('trained_on') or [])) or "—"} · 공식 시험 {_pct(t.get('score'))}
 2. **문제집** · 두뇌가 코스(`{m.get('course', '')}`)를 걷는 동안 0.5초마다, 두뇌가 본 관찰을 글로 바꾼 문제 · 정답 = 두뇌의 답 (가끔 다른 보기로 걸어 길을 벗어난 상황도 넣음 · {m.get('explore', 0):.0%})
-3. **지도학습** · Qwen이 내 두뇌의 답을 따라 배웁니다 (LoRA)
+3. **지도학습** · 언어 모델이 내 두뇌의 답을 따라 배웁니다 (LoRA)
 4. **강화학습** · 보기마다 '그렇게 하고 나머지는 두뇌가 걸었으면 받은 보상'으로, 두뇌의 답보다 확실히 나은 보기는 올리고 나쁜 보기는 내립니다 (KL로 붙잡아 둠)
-5. **채점** · Qwen을 로봇의 결정 자리에 앉혀 같은 코스를 20판 걷습니다 (씨앗 91001–91020){f" · 올린 모델: {m['chosen']}" if m.get('chosen') else ""}
+5. **채점** · 의사결정 모델을 로봇의 결정 자리에 앉혀 같은 코스를 20판 걷습니다 (씨앗 91001–91020){f" · 올린 모델: {m['chosen']}" if m.get('chosen') else ""}
 
 문제 수: {json.dumps(m.get('counts', {}), ensure_ascii=False)} · 글로 옮겨도 두뇌가 같은 답을 내는 비율(정답률 상한) {_pct(ceil)}
 
@@ -242,17 +242,24 @@ Q.task_of("{task}", obs)      # 로봇 관찰 → 위 형식의 문제 (상황 �
 """
 
 
-def push_qwen(adapter_dir, repo=None, name=None, version="v1", results=None, meta=None, token=None, private=False, author=None):
-    """Qwen 어댑터 올리기 · connectailab-rl-이름-버전-link01-qwen"""
+def push_decision_model(adapter_dir, repo=None, name=None, version="v1", results=None, meta=None, token=None, private=False, author=None, brain=None, world=None):
+    """의사결정 모델(LoRA 어댑터) 올리기 · connectailab-rl-이름-버전-link01 · brain(spec) · world(world.json 경로)를 주면 같은 곳에 함께"""
     api, user = _api(token)
-    repo = repo or f"{user}/{repo_name(name or user, version or 'v1', 'link01-qwen')}"
+    repo = repo or f"{user}/{repo_name(name or user, version or 'v1', 'link01')}"
     api.create_repo(repo, exist_ok=True, private=private)
     api.upload_folder(folder_path=adapter_dir, path_in_repo=".", repo_id=repo,
                       allow_patterns=["adapter_config.json", "adapter_model.safetensors", "*.json"])
     m = meta or {}
     info = {"format": "connectailab/1", "repo": repo, "base_model": BASE_MODEL, "backend": "torch", "adapter": ".", "author": author,
-            "kind": "world-qwen", "world": m.get("world"), "task": m.get("task"), "contract": m.get("contract"), "course": m.get("course"),
+            "kind": "world-decision", "world": m.get("world"), "task": m.get("task"), "contract": m.get("contract"), "course": m.get("course"),
             "trained_on": m.get("trained_on"), "teacher": m.get("teacher"), "teacher_test": m.get("teacher_test"), "results": results}
     api.upload_file(path_or_fileobj=json.dumps(info, ensure_ascii=False, indent=1).encode("utf-8"), path_in_repo="connectailab.json", repo_id=repo)
-    api.upload_file(path_or_fileobj=qwen_card(repo, results, m, author=author).encode("utf-8"), path_in_repo="README.md", repo_id=repo)
+    if brain:
+        api.upload_file(path_or_fileobj=json.dumps(brain, ensure_ascii=False).encode("utf-8"), path_in_repo="brain.json", repo_id=repo)
+    if world:
+        api.upload_file(path_or_fileobj=world, path_in_repo="world.json", repo_id=repo)
+    api.upload_file(path_or_fileobj=decision_card(repo, results, m, author=author).encode("utf-8"), path_in_repo="README.md", repo_id=repo)
     return f"https://huggingface.co/{repo}" if user != "dry-run" else os.path.join(os.environ["CT_HF_DRY_RUN"], repo)
+
+
+push_qwen = push_decision_model      # 예전 이름

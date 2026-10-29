@@ -93,7 +93,7 @@ def test_find_brain_accepts_link01(tmp_path):
 
 
 def test_push_world_brain_dry_run(tmp_path, monkeypatch):
-    from connect_tycoon.link01.hub import push_qwen, push_world_brain
+    from connect_tycoon.link01.hub import push_decision_model, push_world_brain
     monkeypatch.setenv("CT_HF_DRY_RUN", str(tmp_path / "hf"))
     b, wj = example("avoid_obstacles")
     p = tmp_path / "brain.json"
@@ -106,6 +106,6 @@ def test_push_world_brain_dry_run(tmp_path, monkeypatch):
     ad = tmp_path / "adapter"
     ad.mkdir()
     (ad / "adapter_config.json").write_text("{}")
-    out = push_qwen(str(ad), name="jay", version="v2", results={"지도학습": {"accuracy": 0.9, "drive_success": 0.95, "drive_collide": 0.0, "drive_time_s": 27.5}},
+    out = push_decision_model(str(ad), name="jay", version="v2", brain=b.spec, world=wj, results={"지도학습": {"accuracy": 0.9, "drive_success": 0.95, "drive_collide": 0.0, "drive_time_s": 27.5}},
                     meta={"task": "avoid_obstacles", "world": "link01-decision", "course": "18b2956e"})
-    assert out.endswith("connectailab-rl-jay-v2-link01-qwen") and "| 지도학습 | 90.0% | 95% | 0% | 27.5초 |" in open(os.path.join(out, "README.md"), encoding="utf-8").read()
+    assert out.endswith("connectailab-rl-jay-v2-link01") and "brain.json" in os.listdir(out) and "world.json" in os.listdir(out) and "| 지도학습 | 90.0% | 95% | 0% | 27.5초 |" in open(os.path.join(out, "README.md"), encoding="utf-8").read()
