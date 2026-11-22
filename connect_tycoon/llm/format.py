@@ -45,7 +45,8 @@ def state_text(dept, ev, values=None):
                 f"손님의 말 \"{REFUND_QUOTE.get(ev['reason'], '환불해 주세요.')}\" · 악용 의심 {_num(ev['fraud_score'], 2)} · "
                 f"결제팀 남은 자리 {_num(ev['billing_left'] * 100)}% · 사람 확인 남은 자리 {c.get('human_seats_left', 0)}")
     elif dept == "security":
-        sig = [s for s, on in (("새 기기", ev["new_device"]), ("해외", ev["overseas"])) if on]
+        # 실제 데이터 백테스트는 기기·해외를 평균 확률(0.3 안팎)로 채웁니다 → 0.5 미만은 신호 없음 (참/거짓으로 읽으면 전부 "새 기기 · 해외")
+        sig = [s for s, on in (("새 기기", ev["new_device"]), ("해외", ev["overseas"])) if float(on) >= 0.5]
         body = (f"온라인 결제 · {_num(ev['amount'], 1)}만원 · {' · '.join(sig) if sig else '평소 기기 · 국내'} · "
                 f"결제 속도 {_num(ev['velocity'], 2)} · 사기 의심 {_num(ev['fraud_score'], 2)} · 사람 확인 남은 자리 {c.get('human_seats_left', 0)}")
     elif dept == "cs":

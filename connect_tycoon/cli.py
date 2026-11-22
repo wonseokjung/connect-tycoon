@@ -198,8 +198,9 @@ def cmd_llm(args):
         print(L.build(LabBrain.from_file(args.teacher), args.out, splits=splits, stride=args.stride))
         return
     if args.step == "data":
-        co = ct.make_company(profile=args.profile)
         teacher = ct.CompanyBrain.load(args.teacher)
+        # 선생님이 배운 회사의 가치 · 분포로 문제집을 만듭니다 (노트북과 같게 · 기본 회사로 만들면 가치가 사라집니다)
+        co = ct.make_company(profile=args.profile or teacher.spec["company"].get("profile") or "general", values=teacher.values)
         splits = {"train": range(20000, 20000 + args.train_months), "valid": range(21000, 21002), "test": range(22000, 22002)}
         print(D.build(co, teacher, args.out, splits=splits, stride=args.stride))
         return
@@ -210,9 +211,10 @@ def cmd_llm(args):
         M.rl(args.data, args.start, args.out, steps=args.steps, batch=args.batch, lr=args.lr or 5e-6, beta=args.beta, max_rows=args.max_rows)
     elif args.step == "eval":
         from .llm.policy import LLMPolicy, report
-        co = ct.make_company(profile=args.profile)
+        meta = _meta(args.data)
+        co = ct.make_company(profile=args.profile or meta.get("profile") or "general", values=meta.get("values"))   # 문제집을 만든 회사와 같은 가치
         test = D.load(args.data, "test")
-        lab = _meta(args.data).get("kind") == "lab"
+        lab = meta.get("kind") == "lab"
         out = {}
         for ad in [None] + (args.adapter or []):                 # 학습 전 Qwen도 같은 시험으로
             sc = M.Scorer(adapter=ad)
