@@ -174,3 +174,16 @@ def test_lab_brain_to_qwen_problems(tmp_path):
     md = lab_card("me/x", {"지도학습": {"accuracy": 0.8, "regret": 1.0, "day_score": 300.0, "on_time": 0.8}}, meta)
     assert "시험 24일 하루 점수" in md and "300.0" in md and "규칙 사장" in md
     assert repo_name("Jay", "v1", "logistics-qwen") == "connectailab-rl-jay-v1-logistics-qwen"
+
+
+def test_security_state_treats_probability_signals_as_off():
+    """실제 카드 백테스트는 new_device·overseas를 평균 확률(예: 0.32 · 0.2)로 채웁니다 → 글로는 '평소 기기 · 국내'여야 합니다
+    (참/거짓으로 읽으면 713건 전부 '새 기기 · 해외'가 되어 글 읽는 모델이 전부 차단합니다). 시뮬레이터의 1.0/0.0은 그대로."""
+    ctx = {"day": 0, "weekday": "월", "sat": 0.8, "human_seats_left": 2}
+    base = {"ctx": ctx, "amount": 22.0, "fraud_score": 0.05, "velocity": 0.36}
+    s = task("security", {**base, "new_device": 0.32, "overseas": 0.2})["state"]
+    assert "평소 기기 · 국내" in s and "새 기기" not in s and "해외" not in s
+    s = task("security", {**base, "new_device": 1.0, "overseas": 0.0})["state"]
+    assert "새 기기" in s and "해외" not in s
+    s = task("security", {**base, "new_device": 1.0, "overseas": 1.0})["state"]
+    assert "새 기기 · 해외" in s
